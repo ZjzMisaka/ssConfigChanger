@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     QIcon icon = QIcon("./img/ssccicon.png");
+
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(icon);
     trayIcon->setToolTip("sscc--ss端口更新器");
@@ -36,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     trayIcon->setContextMenu(trayIconMenu);
     connect(trayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
+    this->setWindowIcon(icon);
     Qt::WindowFlags flag = nullptr;
     setWindowFlags(flag); // 设置禁止最大化
     setFixedSize(this->width(),this->height()); // 禁止改变窗口大小。
@@ -71,7 +73,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     switch (reason)
     {
     case QSystemTrayIcon::MiddleClick:
-        trayIcon->showMessage("当前端口", QString(portStr), QSystemTrayIcon::Information, 5000);
+        trayIcon->showMessage("服务器地址:当前端口", QString(serverAddress) + ":" + QString(portStr), QSystemTrayIcon::NoIcon, 5000);
         break;
     case QSystemTrayIcon::DoubleClick:
         this->show();
