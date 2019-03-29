@@ -23,8 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(restartSsAction, SIGNAL(triggered()), this, SLOT(restartSs()));
     closeSsAction = new QAction("关闭ss", this);
     connect(closeSsAction, SIGNAL(triggered()), this, SLOT(closeSs()));
-    getPortAction = new QAction("更新端口", this);
-    connect(getPortAction, SIGNAL(triggered()), this, SLOT(getPort()));
+    getPortAction = new QAction("更新端口配置并重启ss", this);
+    connect(getPortAction, SIGNAL(triggered()), this, SLOT(getPortSetSsCfgAndRestartSs()));
     quitAction = new QAction("退出", this);
     connect(quitAction, SIGNAL(triggered()), this, SLOT(quit()));
     trayIconMenu = new QMenu(this);
@@ -46,6 +46,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     cfgViewer = new CfgViewer();
     about = new About();
+    cfgViewer->setWindowIcon(icon);
+    about->setWindowIcon(icon);
 
     connect(ui->action_sssearch, SIGNAL(triggered()), this, SLOT(ssSelectFile()));
     connect(ui->action_about, SIGNAL(triggered()), this, SLOT(openAbout()));
@@ -131,18 +133,21 @@ void MainWindow::getPort()
     QString temp = HtmlGetter::getHtml(QString(webPageUrl));
     if(temp.toInt() >= 1 && temp.toInt() <= 65535)
     {
+        ui->label_status->setText("开始获取端口号");
         portStr = temp;
         ui->lineEdit_portnum->setText(portStr);
         writeDatas();
         ui->label_status->setText("成功获取端口号");
+        trayIcon->showMessage("成功获取端口号", QString(serverAddress) + ":" + QString(portStr), QSystemTrayIcon::NoIcon, 5000);
     }
     else
     {
         ui->label_status->setText("获取的端口号不合法");
+        trayIcon->showMessage("获取的端口号不合法", "端口获取网页地址必须以 \"http://\" 开头", QSystemTrayIcon::Warning, 5000);
         return;
     }
 
-    if(ui->checkBox_isrestart_getport->isChecked())
+    if(ui->checkBox_isrestart_getport->isChecked() && !this->isHidden())
     {
         changeSsConfig();
         restartSs();
@@ -158,6 +163,13 @@ void MainWindow::restartSs()
     QProcess::startDetached(ssPath);
 
     ui->label_status->setText("打开/重启ss成功");
+}
+
+void MainWindow::getPortSetSsCfgAndRestartSs()
+{
+    getPort();
+    changeSsConfig();
+    restartSs();
 }
 
 void MainWindow::closeSs()
@@ -377,9 +389,13 @@ void MainWindow::checkCfgAndSsPath()
     }
     else if(fileSsDefault.exists())
     {
-        ssPath = "./Shadowsocks.exe";
+        ssPath = "../Shadowsocks.exe";
+        ui->label_status->setText("成功确认更新器配置文件和ss路径");
     }
-    ui->label_status->setText("成功确认更新器配置文件和ss路径");
+    else
+    {
+        ui->label_status->setText("成功确认更新器配置文件和ss路径");
+    }
 }
 
 void MainWindow::openAbout()

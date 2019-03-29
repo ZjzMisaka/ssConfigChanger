@@ -45,6 +45,7 @@ private slots:
     void openSsccPath();
     void quit();
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    void getPortSetSsCfgAndRestartSs();
 
 private:
     const QString cfgPath = "./sscc.txt";
