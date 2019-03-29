@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ss端口更新器</string>
+   <string>sscc--ss端口更新器</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="pb_getport">
@@ -37,7 +37,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>重启ss</string>
+     <string>打开/重启ss</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pb_writefile">
@@ -235,6 +235,32 @@
      <string>同时更新重启ss</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pb_close">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>10</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>关闭ss</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_autostart">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>10</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>开机自启动</string>
+    </property>
+   </widget>
    <zorder>label_status</zorder>
    <zorder>pb_getport</zorder>
    <zorder>pb_restart</zorder>
@@ -251,6 +277,8 @@
    <zorder>pb_changessconfig</zorder>
    <zorder>checkBox_isrestart_changessconfig</zorder>
    <zorder>checkBox_isrestart_getport</zorder>
+   <zorder>pb_close</zorder>
+   <zorder>checkBox_autostart</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -258,7 +286,7 @@
      <x>0</x>
      <y>0</y>
      <width>410</width>
-     <height>23</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

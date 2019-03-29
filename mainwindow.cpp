@@ -13,6 +13,29 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QIcon icon = QIcon("./img/ssccicon.png");
+    trayIcon = new QSystemTrayIcon(this);
+    trayIcon->setIcon(icon);
+    trayIcon->setToolTip("sscc--ss端口更新器");
+    trayIcon->show();
+    restartSsAction = new QAction("打开/重启ss", this);
+    connect(restartSsAction, SIGNAL(triggered()), this, SLOT(restartSs()));
+    closeSsAction = new QAction("关闭ss", this);
+    connect(closeSsAction, SIGNAL(triggered()), this, SLOT(closeSs()));
+    getPortAction = new QAction("更新端口", this);
+    connect(getPortAction, SIGNAL(triggered()), this, SLOT(getPort()));
+    quitAction = new QAction("退出", this);
+    connect(quitAction, SIGNAL(triggered()), this, SLOT(quit()));
+    trayIconMenu = new QMenu(this);
+    trayIconMenu->addAction(restartSsAction);
+    trayIconMenu->addAction(closeSsAction);
+    trayIconMenu->addSeparator();
+    trayIconMenu->addAction(getPortAction);
+    trayIconMenu->addSeparator();
+    trayIconMenu->addAction(quitAction);
+    trayIcon->setContextMenu(trayIconMenu);
+    connect(trayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
+
     Qt::WindowFlags flag = nullptr;
     setWindowFlags(flag); // 设置禁止最大化
     setFixedSize(this->width(),this->height()); // 禁止改变窗口大小。
@@ -36,13 +59,28 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pb_changessconfig, &QPushButton::clicked, this, &MainWindow::changeSsConfig);
     connect(ui->pb_writefile, &QPushButton::clicked, this, &MainWindow::setDatasToVarAndWriteDatas);
     connect(ui->pb_restart, &QPushButton::clicked, this, &MainWindow::restartSs);
+    connect(ui->pb_close, &QPushButton::clicked, this, &MainWindow::closeSs);
 
     connect(this,  SIGNAL(openCfgMenuSelected(QString)), cfgViewer, SLOT(showCfg(QString)));
 
     checkCfgAndSsPath();
 }
 
+void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    switch (reason)
+    {
+    case QSystemTrayIcon::MiddleClick:
+        trayIcon->showMessage("当前端口", QString(portStr), QSystemTrayIcon::Information, 5000);
+        break;
+    case QSystemTrayIcon::DoubleClick:
+        this->show();
+        break;
+    default:
+        break;
+    }
 
+}
 
 void MainWindow::setWebPageAddressToSsccCfg()
 {
@@ -117,8 +155,19 @@ void MainWindow::restartSs()
 
     QProcess::startDetached(ssPath);
 
-    ui->label_status->setText("重启ss成功");
+    ui->label_status->setText("打开/重启ss成功");
+}
 
+void MainWindow::closeSs()
+{
+    QProcess process;
+    process.execute("TASKKILL /IM Shadowsocks.exe /F");
+    process.close();
+}
+
+void MainWindow::quit()
+{
+    QApplication::exit();
 }
 
 void MainWindow::changeSsConfig()
@@ -187,12 +236,13 @@ void MainWindow::setDatas()
     ui->lineEdit_webpageurl->setText(webPageUrl.trimmed());
     ui->lineEdit_serveraddress->setText(serverAddress.trimmed());
     ui->lineEdit_portnum->setText(portStr.trimmed());
+    ui->checkBox_autostart->setChecked(isAutoStart.contains("True"));
     ui->label_status->setText("成功设置数据");
 }
 
 void MainWindow::getDatas()
 {
-    QByteArray cfgContent[4];
+    QByteArray cfgContent[5];
     QFile file(cfgPath);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -204,6 +254,7 @@ void MainWindow::getDatas()
     cfgContent[1] = file.readLine();
     cfgContent[2] = file.readLine();
     cfgContent[3] = file.readLine();
+    cfgContent[4] = file.readLine();
 
     ssPath = QString(cfgContent[0]);
     ssPath = ssPath.remove(0, 8).trimmed();
@@ -218,6 +269,9 @@ void MainWindow::getDatas()
 
     portStr = QString(cfgContent[3]);
     portStr = portStr.remove(0, 9).trimmed();
+
+    isAutoStart = QString(cfgContent[4]);
+    isAutoStart = isAutoStart.remove(0, 13).trimmed();
 
     ui->label_status->setText("已获得更新器配置文件中的数据");
 
@@ -246,11 +300,13 @@ void MainWindow::writeDatas()
         QString webPageUrlLine(QString("WebPageUrl: ") + webPageUrl);
         QString serverAddressLine(QString("ServerAddress: ") + serverAddress);
         QString portStrLine(QString("PortStr: ") + portStr);
+        QString isAutoStartLine(QString("IsAutoStart: ") + isAutoStart);
 
         txtOutput << ssPathLine << endl;
         txtOutput << webPageUrlLine << endl;
         txtOutput << serverAddressLine << endl;
         txtOutput << portStrLine << endl;
+        txtOutput << isAutoStartLine << endl;
 
         fileCfg.close();
 
@@ -397,8 +453,52 @@ void MainWindow::openSsccPath()
     }
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    event->ignore();
+    cfgViewer->hide();
+    about->hide();
+    this->hide();
+}
+
 MainWindow::~MainWindow()
 {
+    delete cfgViewer;
+    delete about;
+
+    if(ui->checkBox_autostart->isChecked())
+    {
+        if(!isAutoStart.contains("True"))
+        {
+            //设置自启动
+            QString appName = QApplication::applicationName();      //程序名称
+            QString appPath = QApplication::applicationFilePath();      // 程序路径
+            appPath = appPath.replace("/","\\");
+            QSettings *reg=new QSettings("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+            QString val = reg->value(appName).toString();               // 如果此键不存在，则返回的是空字符串
+            if(val != appPath)
+                reg->setValue(appName,appPath);                             // 如果移除的话，reg->remove(applicationName);
+            reg->deleteLater();
+        }
+        isAutoStart = "True";
+    }
+    else
+    {
+        if(!isAutoStart.contains("False"))
+        {
+            //取消自启动
+            QString appName = QApplication::applicationName();      //程序名称
+            QString appPath = QApplication::applicationFilePath();      // 程序路径
+            appPath = appPath.replace("/","\\");
+            QSettings *reg=new QSettings("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+            QString val = reg->value(appName).toString();               // 如果此键不存在，则返回的是空字符串
+            if(val != appPath)
+                reg->remove(appName);                                   // 如果移除的话，reg->remove(applicationName);
+            reg->deleteLater();
+        }
+        isAutoStart = "False";
+    }
+    writeDatas();
     delete ui;
 }
 
