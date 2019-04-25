@@ -7,57 +7,18 @@
     <x>0</x>
     <y>0</y>
     <width>410</width>
-    <height>268</height>
+    <height>346</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>sscc--ss端口更新器</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pb_getport">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>159</y>
-      <width>71</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>更新端口</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_restart">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>打开/重启ss</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_writefile">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>70</y>
-      <width>181</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>批量更新更新器配置文件</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_status">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>189</y>
+      <y>290</y>
       <width>391</width>
       <height>20</height>
      </rect>
@@ -79,206 +40,253 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_nowport">
+   <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>159</y>
-      <width>71</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>当前端口: </string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_webpageurl">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>99</y>
-      <width>91</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>端口获取页面: </string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_setwebpageurl">
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>99</y>
-      <width>101</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>更新网页地址</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_serveraddress">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>129</y>
-      <width>71</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>服务器地址: </string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_setserveraddress">
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>129</y>
-      <width>101</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>更新服务器地址</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_webpageurl">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>100</y>
-      <width>181</width>
-      <height>21</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_serveraddress">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>130</y>
-      <width>181</width>
-      <height>21</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_portnum">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>160</y>
-      <width>101</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="frame">
-     <bool>true</bool>
-    </property>
-    <property name="dragEnabled">
-     <bool>true</bool>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_readfile">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>70</y>
-      <width>181</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>批量读取更新器配置文件</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_changessconfig">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
+      <x>10</x>
       <y>40</y>
-      <width>261</width>
-      <height>23</height>
+      <width>391</width>
+      <height>91</height>
      </rect>
     </property>
-    <property name="text">
-     <string>更新ss配置文件所有内容</string>
+    <property name="title">
+     <string>ShadowSocks</string>
     </property>
+    <widget class="QCheckBox" name="checkBox_isrestart_changessconfig">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>50</y>
+       <width>81</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>同时重启ss</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_changessconfig">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>281</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>更新至配置文件</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_close">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>20</y>
+       <width>81</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>关闭ss</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_restart">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>81</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>打开/重启ss</string>
+     </property>
+    </widget>
    </widget>
-   <widget class="QCheckBox" name="checkBox_isrestart_changessconfig">
+   <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>40</y>
-      <width>81</width>
-      <height>21</height>
+      <x>10</x>
+      <y>140</y>
+      <width>391</width>
+      <height>151</height>
      </rect>
     </property>
-    <property name="text">
-     <string>同时重启ss</string>
+    <property name="title">
+     <string>ssConfogChanger</string>
     </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_isrestart_getport">
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>160</y>
-      <width>111</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>同时更新重启ss</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pb_close">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>10</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>关闭ss</string>
-    </property>
+    <widget class="QPushButton" name="pb_writefile">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>181</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>保存全部</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_readfile">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>20</y>
+       <width>181</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>读取配置</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_webpageurl">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>91</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>端口获取页面: </string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_webpageurl">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>50</y>
+       <width>201</width>
+       <height>23</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_setwebpageurl">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>50</y>
+       <width>81</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>保存</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_setserveraddress">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>80</y>
+       <width>81</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>保存</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_serveraddress">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>80</y>
+       <width>201</width>
+       <height>23</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_serveraddress">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>71</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>服务器地址: </string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_isrestart_getport">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>110</y>
+       <width>81</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>同时重启ss</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_getport">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>110</y>
+       <width>71</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>获取</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_portnum">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>110</y>
+       <width>121</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="frame">
+      <bool>true</bool>
+     </property>
+     <property name="dragEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_nowport">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>110</y>
+       <width>71</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>当前端口: </string>
+     </property>
+    </widget>
    </widget>
    <widget class="QCheckBox" name="checkBox_autostart">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>20</x>
       <y>10</y>
       <width>81</width>
-      <height>21</height>
+      <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>开机自启动</string>
     </property>
    </widget>
-   <zorder>label_status</zorder>
-   <zorder>pb_getport</zorder>
-   <zorder>pb_restart</zorder>
-   <zorder>pb_writefile</zorder>
-   <zorder>label_nowport</zorder>
-   <zorder>label_webpageurl</zorder>
-   <zorder>pb_setwebpageurl</zorder>
-   <zorder>label_serveraddress</zorder>
-   <zorder>pb_setserveraddress</zorder>
-   <zorder>lineEdit_webpageurl</zorder>
-   <zorder>lineEdit_serveraddress</zorder>
-   <zorder>lineEdit_portnum</zorder>
-   <zorder>pb_readfile</zorder>
-   <zorder>pb_changessconfig</zorder>
-   <zorder>checkBox_isrestart_changessconfig</zorder>
-   <zorder>checkBox_isrestart_getport</zorder>
-   <zorder>pb_close</zorder>
-   <zorder>checkBox_autostart</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -320,14 +328,6 @@
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_sssearch">

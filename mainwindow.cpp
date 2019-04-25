@@ -476,13 +476,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     event->ignore();
     cfgViewer->hide();
     about->hide();
-    this->hide();
-}
-
-MainWindow::~MainWindow()
-{
-    delete cfgViewer;
-    delete about;
 
     if(ui->checkBox_autostart->isChecked())
     {
@@ -516,6 +509,14 @@ MainWindow::~MainWindow()
         }
         isAutoStart = "False";
     }
+
+    this->hide();
+}
+
+MainWindow::~MainWindow()
+{
+    delete cfgViewer;
+    delete about;
     writeDatas();
     delete ui;
 }
