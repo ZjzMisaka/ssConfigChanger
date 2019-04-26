@@ -14,4 +14,18 @@
 · 可以设置开机自启动. <br/>
 ### 对于服务器
 · 服务器方需要进行的操作为将更换的端口数字放在可通过http协议在外网访问的网站中的文件上, 文件名与后缀不限, 文件内容为纯数字 (端口值), 不包含代码等任何其他内容. <br/>
+**例如: 使用crontab定时执行脚本**
+````
+#!/bin/bash
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH
+htmlName=/xxxxxxxx/ShadowSocksPort.html
+now=`cat $htmlName`
+echo $now
+temp=$(python -c 'import random;print random.randint(xxxx,xxxx)')
+echo $temp
+sed -i "s/$now/$temp/" /etc/ShadowSocks/ssConfig.json
+sed -i "s/$now/$temp/" /xxxxxxxx/ShadowSocksPort.html
+ssserver -c /etc/ShadowSocks/ssConfig.json -d restart
+````
 · 由于默认路径放在ss根目录下, 并且可以操作ss的启动, 关闭等基本操作, 因此可以当作启动器使用. 可以配好配置文件一并打包. <br/>
