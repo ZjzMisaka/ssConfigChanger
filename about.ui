@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>439</width>
-    <height>362</height>
+    <height>442</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>40</y>
+     <y>120</y>
      <width>381</width>
      <height>141</height>
     </rect>
@@ -40,7 +40,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>210</y>
+     <y>290</y>
      <width>381</width>
      <height>61</height>
     </rect>
@@ -57,7 +57,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>20</y>
+     <y>100</y>
      <width>54</width>
      <height>12</height>
     </rect>
@@ -70,7 +70,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>190</y>
+     <y>270</y>
      <width>54</width>
      <height>12</height>
     </rect>
@@ -83,7 +83,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>280</y>
+     <y>360</y>
      <width>54</width>
      <height>12</height>
     </rect>
@@ -96,7 +96,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>300</y>
+     <y>380</y>
      <width>381</width>
      <height>41</height>
     </rect>
@@ -107,6 +107,45 @@
    <property name="plainText">
     <string>-- 对https等的支持.   &lt;-  去他的https, 不管了.
 -- 更新器配置文件的复数配置的管理. </string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>20</y>
+     <width>381</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>ZjzMisaka</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>40</y>
+     <width>381</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>https://github.com/ZjzMisaka/ssConfigChanger</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>60</y>
+     <width>381</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>v1.3</string>
    </property>
   </widget>
  </widget>

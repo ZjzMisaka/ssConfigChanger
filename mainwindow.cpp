@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "htmlgetter.h"
 #include <windows.h>
@@ -369,12 +369,21 @@ void MainWindow::ssSelectFile()
 
 void MainWindow::checkCfgAndSsPath()
 {
-    QFile fileCfg(cfgPath);
-    if (!fileCfg.exists())
+    QFile fileCfgDir(cfgDir);
+    QFile fileCfgPath(cfgPath);
+    if (!fileCfgDir.exists())
     {
         ui->label_status->setText("未找到更新器配置文件");
-        fileCfg.open(QIODevice::WriteOnly);
-        fileCfg.close();
+        QDir dir;
+        dir.mkdir(cfgDir);
+        fileCfgDir.open(QIODevice::WriteOnly);
+        fileCfgDir.close();
+    }
+    else if (!fileCfgPath.exists())
+    {
+        ui->label_status->setText("未找到更新器配置文件");
+        fileCfgPath.open(QIODevice::WriteOnly);
+        fileCfgPath.close();
     }
     else
     {
@@ -458,9 +467,7 @@ void MainWindow::openSsPath()
 
 void MainWindow::openSsccPath()
 {
-    QString cfgPathTemp = cfgPath;
-    QString filePath = cfgPathTemp.remove(cfgPathTemp.lastIndexOf('/'), cfgPathTemp.length() - cfgPathTemp.lastIndexOf('/'));
-    if(QDesktopServices::openUrl(QUrl("file:" + filePath, QUrl::TolerantMode)))
+    if(QDesktopServices::openUrl(QUrl("file:" + cfgDir, QUrl::TolerantMode)))
     {
         ui->label_status->setText("打开更新器路径成功");
     }
@@ -477,16 +484,17 @@ void MainWindow::closeEvent(QCloseEvent *event)
     cfgViewer->hide();
     about->hide();
 
+    QString appName = QApplication::applicationName();      //程序名称
+    QString appPath = QApplication::applicationFilePath();      // 程序路径
+    appPath = appPath.replace("/","\\");
+    QSettings *reg=new QSettings("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+    QString val = reg->value(appName).toString();               // 如果此键不存在，则返回的是空字符串
+
     if(ui->checkBox_autostart->isChecked())
     {
         if(!isAutoStart.contains("True"))
         {
             //设置自启动
-            QString appName = QApplication::applicationName();      //程序名称
-            QString appPath = QApplication::applicationFilePath();      // 程序路径
-            appPath = appPath.replace("/","\\");
-            QSettings *reg=new QSettings("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-            QString val = reg->value(appName).toString();               // 如果此键不存在，则返回的是空字符串
             if(val != appPath)
                 reg->setValue(appName,appPath);                             // 如果移除的话，reg->remove(applicationName);
             reg->deleteLater();
@@ -498,11 +506,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
         if(!isAutoStart.contains("False"))
         {
             //取消自启动
-            QString appName = QApplication::applicationName();      //程序名称
-            QString appPath = QApplication::applicationFilePath();      // 程序路径
-            appPath = appPath.replace("/","\\");
-            QSettings *reg=new QSettings("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-            QString val = reg->value(appName).toString();               // 如果此键不存在，则返回的是空字符串
             if(val != appPath)
                 reg->remove(appName);                                   // 如果移除的话，reg->remove(applicationName);
             reg->deleteLater();

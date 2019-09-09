@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -48,7 +48,8 @@ private slots:
     void getPortSetSsCfgAndRestartSs();
 
 private:
-    const QString cfgPath = "./sscc.txt";
+    const QString cfgPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ssConfigChanger/sscc.txt";
+    const QString cfgDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ssConfigChanger";
     void checkCfgAndSsPath();
     void setDatas();
     void setSsConfigPath();
