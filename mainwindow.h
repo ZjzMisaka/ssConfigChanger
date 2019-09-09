@@ -11,6 +11,7 @@
 #include "QDesktopServices"
 #include "QSystemTrayIcon"
 #include "QCloseEvent"
+#include "QStyle"
 
 namespace Ui {
 class MainWindow;
@@ -50,7 +51,9 @@ private slots:
 private:
     const QString cfgPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ssConfigChanger/sscc.txt";
     const QString cfgDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ssConfigChanger";
-    void checkCfgAndSsPath();
+    const QString imgDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ssConfigChanger/img";
+    const QString iconPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ssConfigChanger/img/ssccicon.png";
+    void checkCfgAndImgAndSsPath();
     void setDatas();
     void setSsConfigPath();
     void setDatasToVarAndWriteDatas();

@@ -13,12 +13,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QIcon icon = QIcon("./img/ssccicon.png");
-
-    trayIcon = new QSystemTrayIcon(this);
-    trayIcon->setIcon(icon);
-    trayIcon->setToolTip("sscc--ss端口更新器");
-    trayIcon->show();
     restartSsAction = new QAction("打开/重启ss", this);
     connect(restartSsAction, SIGNAL(triggered()), this, SLOT(restartSs()));
     closeSsAction = new QAction("关闭ss", this);
@@ -27,17 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(getPortAction, SIGNAL(triggered()), this, SLOT(getPortSetSsCfgAndRestartSs()));
     quitAction = new QAction("退出", this);
     connect(quitAction, SIGNAL(triggered()), this, SLOT(quit()));
-    trayIconMenu = new QMenu(this);
-    trayIconMenu->addAction(restartSsAction);
-    trayIconMenu->addAction(closeSsAction);
-    trayIconMenu->addSeparator();
-    trayIconMenu->addAction(getPortAction);
-    trayIconMenu->addSeparator();
-    trayIconMenu->addAction(quitAction);
-    trayIcon->setContextMenu(trayIconMenu);
-    connect(trayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
-    this->setWindowIcon(icon);
     Qt::WindowFlags flag = nullptr;
     setWindowFlags(flag); // 设置禁止最大化
     setFixedSize(this->width(),this->height()); // 禁止改变窗口大小。
@@ -46,8 +30,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     cfgViewer = new CfgViewer();
     about = new About();
-    cfgViewer->setWindowIcon(icon);
-    about->setWindowIcon(icon);
 
     connect(ui->action_sssearch, SIGNAL(triggered()), this, SLOT(ssSelectFile()));
     connect(ui->action_about, SIGNAL(triggered()), this, SLOT(openAbout()));
@@ -67,7 +49,37 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(this,  SIGNAL(openCfgMenuSelected(QString)), cfgViewer, SLOT(showCfg(QString)));
 
-    checkCfgAndSsPath();
+    checkCfgAndImgAndSsPath();
+
+    QIcon icon;
+    QFile fileIconPath(iconPath);
+
+    if (!fileIconPath.exists())
+    {
+        QStyle* style = QApplication::style();
+        icon = style->standardIcon(QStyle::SP_MessageBoxWarning);
+    }
+    else
+    {
+        icon = QIcon(iconPath);
+    }
+
+    trayIcon = new QSystemTrayIcon(this);
+    trayIcon->setIcon(icon);
+    trayIcon->setToolTip("sscc--ss端口更新器");
+    trayIcon->show();
+    trayIconMenu = new QMenu(this);
+    trayIconMenu->addAction(restartSsAction);
+    trayIconMenu->addAction(closeSsAction);
+    trayIconMenu->addSeparator();
+    trayIconMenu->addAction(getPortAction);
+    trayIconMenu->addSeparator();
+    trayIconMenu->addAction(quitAction);
+    trayIcon->setContextMenu(trayIconMenu);
+    connect(trayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
+    this->setWindowIcon(icon);
+    cfgViewer->setWindowIcon(icon);
+    about->setWindowIcon(icon);
 }
 
 void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
@@ -298,7 +310,7 @@ void MainWindow::writeDatas()
     if (!fileCfg.exists())
     {
         ui->label_status->setText("未找到更新器配置文件");
-        checkCfgAndSsPath();
+        checkCfgAndImgAndSsPath();
     }
     else
     {
@@ -367,21 +379,43 @@ void MainWindow::ssSelectFile()
     return;
 }
 
-void MainWindow::checkCfgAndSsPath()
+void MainWindow::checkCfgAndImgAndSsPath()
 {
     QFile fileCfgDir(cfgDir);
     QFile fileCfgPath(cfgPath);
+    QFile fileImgDir(imgDir);
+    QFile fileIconPath(iconPath);
+
+    QString msg = "";
+
+    if (!fileImgDir.exists() || !fileIconPath.exists())
+    {
+        ui->label_status->setText("未找到图标图片文件 ");
+        QDir dir;
+        dir.mkdir(imgDir);
+        if (!QFile::exists("./img/ssccicon.png"))
+        {
+            msg += "源图标图片不存在, 建议重新下载 ";
+        }
+
+        if(!QFile::copy("./img/ssccicon.png", iconPath))
+        {
+            msg += "图标图片复制失败, 建议重启软 ";
+        }
+    }
+
     if (!fileCfgDir.exists())
     {
-        ui->label_status->setText("未找到更新器配置文件");
+        msg += "未找到更新器配置文件 ";
         QDir dir;
         dir.mkdir(cfgDir);
         fileCfgDir.open(QIODevice::WriteOnly);
         fileCfgDir.close();
     }
-    else if (!fileCfgPath.exists())
+
+    if (!fileCfgPath.exists())
     {
-        ui->label_status->setText("未找到更新器配置文件");
+        msg += "未找到更新器配置文件 ";
         fileCfgPath.open(QIODevice::WriteOnly);
         fileCfgPath.close();
     }
@@ -393,18 +427,20 @@ void MainWindow::checkCfgAndSsPath()
     QFile fileSsCustomize(ssPath);
     if(!fileSsDefault.exists() && !fileSsCustomize.exists())
     {
-        ui->label_status->setText("未找到Shadowsocks.exe");
+        msg += "未找到Shadowsocks.exe ";
         ssSelectFile();
     }
     else if(fileSsDefault.exists())
     {
         ssPath = "../Shadowsocks.exe";
-        ui->label_status->setText("成功确认更新器配置文件和ss路径");
+        msg += "成功确认更新器配置文件和ss路径 ";
     }
     else
     {
-        ui->label_status->setText("成功确认更新器配置文件和ss路径");
+        msg += "成功确认更新器配置文件和ss路径 ";
     }
+
+    ui->label_status->setText(msg);
 }
 
 void MainWindow::openAbout()
@@ -474,7 +510,7 @@ void MainWindow::openSsccPath()
     else
     {
         ui->label_status->setText("打开更新器路径失败");
-        checkCfgAndSsPath();
+        checkCfgAndImgAndSsPath();
     }
 }
 
